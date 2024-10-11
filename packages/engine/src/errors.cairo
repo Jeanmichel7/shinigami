@@ -28,6 +28,8 @@ pub mod Error {
     pub const SCRIPT_TOO_LARGE: felt252 = 'Script is too large';
     pub const SCRIPT_UNFINISHED: felt252 = 'Script unfinished';
     pub const SCRIPT_ERR_SIG_DER: felt252 = 'Signature DER error';
+    pub const TAPROOT_PUBKEY_EMPTY: felt252 = 'Taproot pubkey empty';
+    pub const TAPROOT_MAX_SIGOPS: felt252 = 'Taproot max sigops exceeded';
 }
 
 pub fn byte_array_err(err: felt252) -> ByteArray {

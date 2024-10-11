@@ -5,6 +5,7 @@ pub mod validate;
 pub mod utxo;
 pub mod witness;
 pub mod hash_cache;
+pub mod taproot;
 pub mod errors;
 pub mod opcodes {
     pub mod opcodes;

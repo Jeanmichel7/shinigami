@@ -190,6 +190,7 @@ pub mod Opcode {
     pub const OP_NOP8: u8 = 183;
     pub const OP_NOP9: u8 = 184;
     pub const OP_NOP10: u8 = 185;
+    pub const OP_CHECKSIGADD: u8 = 186;
 
     use crate::engine::Engine;
     use crate::transaction::{
@@ -401,6 +402,7 @@ pub mod Opcode {
             183 => flow::opcode_nop(ref engine, 183),
             184 => flow::opcode_nop(ref engine, 184),
             185 => flow::opcode_nop(ref engine, 185),
+            186 => crypto::opcode_checksigadd(ref engine),
             _ => utils::not_implemented(ref engine)
         }
     }

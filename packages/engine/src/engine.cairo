@@ -8,6 +8,7 @@ use crate::transaction::{
 };
 use crate::hash_cache::{HashCache, HashCacheTrait};
 use crate::witness;
+use crate::taproot::TaprootExecutionCtx;
 use shinigami_utils::byte_array::{byte_array_to_bool, byte_array_to_felt252_le};
 use shinigami_utils::bytecode::hex_to_bytecode;
 use shinigami_utils::hash::sha256_byte_array;
@@ -50,6 +51,8 @@ pub struct Engine<T> {
     pub last_code_sep: u32,
     // Count number of non-push opcodes
     pub num_ops: u32,
+    // Taproot context
+    pub taproot_ctx: TaprootExecutionCtx,
 }
 
 // TODO: SigCache
@@ -127,6 +130,7 @@ pub impl EngineImpl<
             cond_stack: ConditionalStackImpl::new(),
             last_code_sep: 0,
             num_ops: 0,
+            taproot_ctx: Default::default(),
         };
 
         if engine.has_flag(ScriptFlags::ScriptVerifyCleanStack)
