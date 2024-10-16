@@ -400,19 +400,19 @@ fn test_op_checkmultisig_valid() {
     check_expected_dstack(ref engine, expected_stack.span());
 }
 
-// #[test]
-// fn test_op_checksigadd_valid() {
-//     let script_sig =
-//         "OP_DATA_71
-//         0x3044022008f4f37e2d8f74e18c1b8fde2374d5f28402fb8ab7fd1cc5b786aa40851a70cb02201f40afd1627798ee8529095ca4b205498032315240ac322c9d8ff0f205a93a5801
-//         OP_DATA_33 0x024aeaf55040fa16de37303d13ca1dde85f4ca9baa36e2963a27a1c0c1165fe2b1";
-//     let script_pubkey = "OP_1 OP_SWAP OP_CHECKSIGADD";
-//     let mut transaction = utils::mock_transaction(script_sig);
-//     let mut engine = utils::test_compile_and_run_with_tx(script_pubkey, transaction);
-//     utils::check_dstack_size(ref engine, 1);
-//     let expected_stack = array![ScriptNum::wrap(2)];
-//     utils::check_expected_dstack(ref engine, expected_stack.span());
-// }
+#[test]
+fn test_op_checksigadd_valid() {
+    let script_sig =
+        "OP_DATA_71
+        0x3044022008f4f37e2d8f74e18c1b8fde2374d5f28402fb8ab7fd1cc5b786aa40851a70cb02201f40afd1627798ee8529095ca4b205498032315240ac322c9d8ff0f205a93a5801
+        OP_DATA_33 0x024aeaf55040fa16de37303d13ca1dde85f4ca9baa36e2963a27a1c0c1165fe2b1";
+    let script_pubkey = "OP_1 OP_SWAP OP_CHECKSIGADD";
+    let mut transaction = mock_transaction(script_sig);
+    let mut engine = utils::test_compile_and_run_with_tx(script_pubkey, transaction);
+    utils::check_dstack_size(ref engine, 1);
+    let expected_stack = array![ScriptNum::wrap(2)];
+    utils::check_expected_dstack(ref engine, expected_stack.span());
+}
 
 // #[test]
 // fn test_op_checksigadd_invalid_script_num() {
