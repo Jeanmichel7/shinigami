@@ -453,11 +453,13 @@ pub struct TaprootSigVerifier {
 
 pub trait TaprootSigVerifierTrait<T> {
     fn new(
-        sig_bytes: @ByteArray, pk_bytes: @ByteArray, annex: @ByteArray
+        sig_bytes: @ByteArray, pk_bytes: @ByteArray, ref vm: Engine<T>, annex: @ByteArray
     ) -> Result<TaprootSigVerifier, felt252>;
-    fn new_base(sig_bytes: @ByteArray, pk_bytes: @ByteArray) -> Result<TaprootSigVerifier, felt252>;
-    fn verify(ref self: TaprootSigVerifier) -> bool;
-    fn verify_base(ref self: TaprootSigVerifier) -> bool;
+    fn new_base(
+        sig_bytes: @ByteArray, pk_bytes: @ByteArray, ref vm: Engine<T>
+    ) -> Result<TaprootSigVerifier, felt252>;
+    fn verify(ref self: TaprootSigVerifier, ref vm: Engine<T>) -> bool;
+    fn verify_base(ref self: TaprootSigVerifier, ref vm: Engine<T>) -> bool;
 }
 
 pub impl TaprootSigVerifierImpl<
@@ -474,26 +476,55 @@ pub impl TaprootSigVerifierImpl<
     >
 > of TaprootSigVerifierTrait<T> {
     fn new(
-        sig_bytes: @ByteArray, pk_bytes: @ByteArray, annex: @ByteArray
+        sig_bytes: @ByteArray, pk_bytes: @ByteArray, ref vm: Engine<T>, annex: @ByteArray
     ) -> Result<TaprootSigVerifier, felt252> {
         // TODO
         return Result::Err('TaprootSig not implemented');
     }
 
     fn new_base(
-        sig_bytes: @ByteArray, pk_bytes: @ByteArray
+        sig_bytes: @ByteArray, pk_bytes: @ByteArray, ref vm: Engine<T>
     ) -> Result<TaprootSigVerifier, felt252> {
         // TODO
         return Result::Err('TaprootSig not implemented');
     }
 
-    fn verify(ref self: TaprootSigVerifier) -> bool {
-        // TODO: implement taproot verification
-        return false;
+    fn verify(ref self: TaprootSigVerifier, ref vm: Engine<T>) -> bool {
+        // let sig_hash: u256 = sighash::calc_signature_hash(
+        //     @self.sub_script, self.hash_type, ref vm.transaction, vm.tx_idx
+        // );
+
+        // Compute the sighash for key path spend
+        let sig_hash: u256 = sighash::calc_taproot_signature_hash(
+            @self.sub_script, self.hash_type, ref vm.transaction, vm.tx_idx
+        );
+
+        is_valid_schnorr_signature(sig_hash, self.sig, self.pub_key)
     }
 
-    fn verify_base(ref self: TaprootSigVerifier) -> bool {
+    fn verify_base(ref self: TaprootSigVerifier, ref vm: Engine<T>) -> bool {
         // TODO: implement taproot verification
         return false;
     }
 }
+
+pub fn is_valid_schnorr_signature<
+    Secp256Point, +Drop<Secp256Point>, impl Secp256Impl: Secp256Trait<Secp256Point>,
+>(
+    msg_hash: u256, sig: Signature, public_key: Secp256Point
+) -> bool {
+    // Implement Schnorr signature verification as per BIP 340
+
+    // Steps:
+    // 1. Parse the public key and signature
+    // 2. Compute the challenge scalar
+    // 3. Reconstruct the point R'
+    // 4. Verify that R' is equal to R from the signature
+
+    // Placeholder implementation:
+    // TODO: Replace with actual Schnorr signature verification logic
+
+    // For now, return false
+    return false;
+}
+
