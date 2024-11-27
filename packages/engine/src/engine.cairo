@@ -67,7 +67,7 @@ pub struct Engine<T> {
     // Amount of the input being spent
     pub amount: i64,
     // The script to execute
-    scripts: Array<@ByteArray>,
+    pub scripts: Array<@ByteArray>,
     // Index of the current script being executed
     script_idx: usize,
     // Program counter within the current script
@@ -218,6 +218,7 @@ pub impl EngineExtrasImpl<T, +Drop<T>> of EngineExtrasTrait<T> {
         };
         return sub_script;
     }
+    // fn get
 }
 
 pub trait EngineInternalTrait {

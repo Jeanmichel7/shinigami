@@ -496,7 +496,12 @@ pub impl TaprootSigVerifierImpl<
 
         // Compute the sighash for key path spend
         let sig_hash: u256 = sighash::calc_taproot_signature_hash(
-            @self.sub_script, self.hash_type, ref vm.transaction, vm.tx_idx
+            @vm.sub_script(),
+            self.hash_type,
+            ref vm.transaction,
+            vm.tx_idx,
+            *vm.scripts[1],
+            vm.amount
         );
 
         is_valid_schnorr_signature(sig_hash, self.sig, self.pub_key)

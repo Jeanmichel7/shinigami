@@ -191,50 +191,10 @@ pub fn calc_taproot_signature_hash<
     hash_type: u32,
     ref transaction: T,
     tx_idx: u32,
-    prev_outpoint: TransactionOutput,
-    sig_hash_opts: TaprootSigHashOpts
+    prev_pkscript: @ByteArray,
+    prev_value: i64,
+    // prev_outpoint: TransactionOutput,
+// sig_hash_opts: TaprootSigHashOpts
 ) -> u256 {
-    // Step 1: Compute hashes of transaction components
-    let hash_prevouts = hash_prevouts(transaction);
-    let hash_amounts = hash_amounts(transaction);
-    let hash_scriptpubkeys = hash_scriptpubkeys(transaction);
-    let hash_sequences = hash_sequences(transaction);
-    let hash_outputs = hash_outputs(transaction);
-    let hash_annex = if self.annex.len() > 0 {
-        Some(hash_annex(self.annex))
-    } else {
-        None
-    };
-
-    // Step 2: Create the sighash message
-    let mut sighash_bytes = ByteArray::new();
-
-    // Version (4 bytes, little-endian)
-    sighash_bytes.append_word_rev(transaction.get_version().into(), 4);
-
-    // Input index (4 bytes, little-endian)
-    sighash_bytes.append_word_rev(tx_idx.into(), 4);
-
-    // Hashes computed earlier
-    sighash_bytes.append_u256(hash_prevouts);
-    sighash_bytes.append_u256(hash_amounts);
-    sighash_bytes.append_u256(hash_scriptpubkeys);
-    sighash_bytes.append_u256(hash_sequences);
-    sighash_bytes.append_u256(hash_outputs);
-
-    // Annex hash if present
-    if let Some(hash_annex) = hash_annex {
-        sighash_bytes.append_u256(hash_annex);
-    }
-
-    // Lock time (4 bytes, little-endian)
-    sighash_bytes.append_word_rev(transaction.get_lock_time().into(), 4);
-
-    // Sighash type (4 bytes, little-endian)
-    sighash_bytes.append_word_rev(self.hash_type.into(), 4);
-
-    // Step 3: Compute the tagged hash
-    let sighash = tagged_hash("TapSighash", sighash_bytes);
-
-    return sighash;
+    1
 }
